@@ -76,11 +76,24 @@ class get_process_data(object):
         return extract_col_value_list
 
     #从单元格中提取出想要的字段，并返回该字段
-    def extract_from_col_value(self,col_value,target_string,extract_len):
+    def shifting_extract_col_value(self,col_value,target_string,extract_len):
         try:
             start_index = col_value.index(target_string)
             end_index = start_index + extract_len
             extract_col_value = col_value[(start_index+4):end_index]
+        except ValueError:
+            extract_col_value = ""
+        except:
+            info = sys.exc_info()
+            extract_col_value = info[1]
+
+        return extract_col_value
+
+    def extract_col_value(self,col_value,target_string,extract_len):
+        try:
+            start_index = col_value.index(target_string)
+            end_index = start_index + extract_len
+            extract_col_value = col_value[start_index:end_index]
         except ValueError:
             extract_col_value = ""
         except:

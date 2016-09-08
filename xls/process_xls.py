@@ -20,7 +20,7 @@ table = workbook.sheets()[0]
 nrows = table.nrows
 ncols = table.ncols
 
-extract_col_num =16
+extract_col_num =1
 
 sys_invoice = table.col_values(extract_col_num)
 #sys_invoice_rem_reapt = list(set(sys_invoice))
@@ -44,8 +44,11 @@ new_table = new_file.add_sheet('processed_data')
 reapt_count = 0
 for rownum in xrange(0,nrows):
     if table.row_values(rownum)[extract_col_num] != '' and table.row_values(rownum)[extract_col_num] not in sys_invoice_reapt_list:
-        for colnum in xrange(0,ncols):
-            new_table.write(rownum-reapt_count,colnum,table.row_values(rownum)[colnum])
+        new_table.write(rownum-reapt_count,0,'15610')
+        new_table.write(rownum-reapt_count,1,table.row_values(rownum)[2])
+        new_table.write(rownum-reapt_count,2,table.row_values(rownum)[1])
+        new_table.write(rownum-reapt_count,3,'RI')
+        new_table.write(rownum-reapt_count,4,table.row_values(rownum)[0])
     else:
         reapt_count = reapt_count+1
 
@@ -62,11 +65,13 @@ for reapt_sys_invoice_num in sys_invoice_reapt_list:
 
 #合并处理相同系统发票号的行数据
 for reapt_value in all_reapt_values_dict_list:
+    new_table.write(count_unique_rows,0,'15610')
+    new_table.write(count_unique_rows,3,'RI')
     for keys,values in reapt_value.items():
         #获取系统发票号相同的数据中的发票号最小值的索引和最大值的索引，为后面合并发票号做准备
         invoice_num = []
         for value in values:
-            invoice_num.append(table.row_values(value)[3])
+            invoice_num.append(table.row_values(value)[0])
 
         min_invoice_num = min(invoice_num)
         max_invoice_num = max(invoice_num)
@@ -78,10 +83,12 @@ for reapt_value in all_reapt_values_dict_list:
 
         #处理系统发票号相同的数据，并追加写入新xls文件中
         for colnum in xrange(0, ncols):
-            if colnum != 3:
-                new_table.write(count_unique_rows,colnum,table.row_values(values[min_invoice_index])[colnum])
-            else:
-                new_table.write(count_unique_rows,colnum,table.row_values(values[min_invoice_index])[colnum] + '-' + table.row_values(values[max_invoice_index])[colnum][-2:])
+            if colnum == 0:
+                new_table.write(count_unique_rows,4,table.row_values(values[min_invoice_index])[colnum] + '-' + table.row_values(values[max_invoice_index])[colnum][-2:])
+            elif colnum == 1:
+                new_table.write(count_unique_rows,2,table.row_values(values[min_invoice_index])[colnum])
+            elif colnum == 2:
+                new_table.write(count_unique_rows,1,table.row_values(values[min_invoice_index])[colnum])
 
         count_unique_rows = count_unique_rows + 1
 
