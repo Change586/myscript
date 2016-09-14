@@ -18,7 +18,7 @@ class GetSysInfo(object):
 
     def get_iscsi_lun_list(self):
         iscsi_lun_list = []
-        iscsi_lun_list_string = commands.getoutput('ucli vd_iscsi -l | awk \'{print $1,$2}\'')
+        iscsi_lun_list_string = commands.getoutput('ucli vd_iscsi -l | awk \'{print $2}\'')
         iscsi_lun_list_temp = iscsi_lun_list_string.split('\n')
 
         for iscsi_lun in iscsi_lun_list_temp:
@@ -37,6 +37,15 @@ class GetSysInfo(object):
                 nas_lun_list.append(nas_lun)
 
         return nas_lun_list
+
+    def get_dg_lun_dict(self):
+        dg_list =  get_dg_list()
+        dg_lun_dict = {}
+        for dg in dg_list:
+            lun_string = commands.getoutput('ucli vd_iscsi -l | grep -w ' + dg + ' | awk \'{print $2}\'')
+            lun_list_temp = lun_string.split('\n')
+            dg_lun_dict[dg] = lun_list_temp
+
 
 
 
