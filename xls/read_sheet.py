@@ -8,7 +8,7 @@ from collections import Counter
 
 
 
-class get_process_data(object):
+class get_data(object):
     def __init__(self):
         reload(sys)
         sys.setdefaultencoding('utf-8')
@@ -75,12 +75,12 @@ class get_process_data(object):
 
         return extract_col_value_list
 
-    #从单元格中提取出想要的字段，并返回该字段
-    def shifting_extract_col_value(self,col_value,target_string,extract_len):
+    #按偏移量从单元格中提取出想要的字段，并返回该字段
+    def shifting_extract_col_value(self,col_value,target_string,shifting_num,extract_len):
         try:
             start_index = col_value.index(target_string)
             end_index = start_index + extract_len
-            extract_col_value = col_value[(start_index+4):end_index]
+            extract_col_value = col_value[(start_index+shifting_num):end_index]
         except ValueError:
             extract_col_value = ""
         except:
@@ -89,6 +89,7 @@ class get_process_data(object):
 
         return extract_col_value
 
+    #从单元格中提取出想要的字段，并返回该字段
     def extract_col_value(self,col_value,target_string,extract_len):
         try:
             start_index = col_value.index(target_string)
@@ -101,6 +102,42 @@ class get_process_data(object):
             extract_col_value = info[1]
 
         return extract_col_value
+
+    #获取某列中非空重复值与行号的对应dict
+    def reapt_value_indexs_dict(self,table_data,processed_col):
+        count_col_value_dict = dict(Counter(table_data.col_values(processed_col)))
+        col_value_list = table_data.col_values(processed_col)
+
+        reapt_values_dict = {}
+        for key, value in count_col_value_dict.items():
+            if key != '' and value > 1:
+                reapt_values_dict[key] = value
+
+        reapt_values_list = reapt_values_dict.keys()
+
+        reapt_value_indexs_dict = {}
+        for reapt_value in reapt_values_list:
+            reapt_value_indexs_dict[reapt_value] = []
+            if reapt_value != '':
+                for index in xrange(len(col_value_list)):
+                    if col_value_list[index] == reapt_value:
+                        reapt_value_indexs_dict[reapt_value].append(index)
+        return reapt_value_indexs_dict
+
+    #获取某列中非空的唯一值列表
+    def unique_values_list(self,table_data,processed_col):
+        count_col_value_dict = dict(Counter(table_data.col_values(processed_col)))
+        unique_values_list = []
+
+        for key,value in count_col_value_dict.items():
+            if key != '' and value == 1:
+                unique_values_list.append(key)
+
+        return unique_values_list
+
+
+
+
 
 
 

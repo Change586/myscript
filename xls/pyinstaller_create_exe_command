@@ -1,0 +1,1 @@
+python pyinstaller.py -F -w -p G:\CleanWater\PycharmProjects\myscript\xls\ --icon="D:\handledata.ico" G:\CleanWater\PycharmProjects\myscript\xls\handle_data.py
