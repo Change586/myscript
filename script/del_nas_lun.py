@@ -5,4 +5,4 @@ for dg_name in dg_names_nas:
     for i in xrange(1,2):
         nas_vd_name = dg_name + 'nas' + str(i)
         nas_sys_cli = SysCli(dg_name,nas_vd_name,ip_address)
-        nas_sys_cli.DelNasLun()
+        nas_sys_cli.del_nas_lun()

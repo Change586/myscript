@@ -38,13 +38,36 @@ class GetSysInfo(object):
 
         return nas_lun_list
 
-    def get_dg_lun_dict(self):
-        dg_list =  get_dg_list()
-        dg_lun_dict = {}
+    def get_dg_iscsi_lun_dict(self):
+        dg_list =  self.get_dg_list()
+        dg_iscsi_lun_dict = {}
         for dg in dg_list:
-            lun_string = commands.getoutput('ucli vd_iscsi -l | grep -w ' + dg + ' | awk \'{print $2}\'')
-            lun_list_temp = lun_string.split('\n')
-            dg_lun_dict[dg] = lun_list_temp
+            iscsi_lun_string = commands.getoutput('ucli vd_iscsi -l | grep -w ' + dg + ' | awk \'{print $2}\'')
+            iscsi_lun_list_temp = iscsi_lun_string.split('\n')
+            dg_iscsi_lun_dict[dg] = iscsi_lun_list_temp
+
+        return dg_iscsi_lun_dict
+
+    def get_dg_nas_lun_dict(self):
+        dg_list =  self.get_dg_list()
+        dg_nas_lun_dict = {}
+        for dg in dg_list:
+            nas_lun_string = commands.getoutput('ucli vd_nas -l | grep -w ' + dg + ' | awk \'{print $2}\'')
+            nas_lun_list_temp = nas_lun_string.split('\n')
+            dg_nas_lun_dict[dg] = nas_lun_list_temp
+
+        return dg_nas_lun_dict
+
+
+if __name__ == '__main__':
+    sys_info = GetSysInfo()
+    dg_list = sys_info.get_dg_list()
+    lun_list = sys_info.get_iscsi_lun_list()
+    nas_list = sys_info.get_nas_lun_list()
+
+    print dg_list
+    print lun_list
+    print nas_list
 
 
 
