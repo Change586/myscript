@@ -9,5 +9,5 @@ for dg_name in dg_names:
     for i in xrange(1,6):
         iscsi_vd_name = dg_name + 'iscsi' + str(i)
         iscsi_sys_cli = SysCli(dg_name,iscsi_vd_name,ip_address)
-        iscsi_sys_cli.CreateIscsiLun()
-        iscsi_sys_cli.IscsiLunAddPermission()
+        iscsi_sys_cli.create_iscsi_lun()
+        iscsi_sys_cli.iscsi_lun_add_permission()
