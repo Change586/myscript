@@ -52,6 +52,15 @@ def change_to_sheets(path,sys_invoice_col,invoice_col):
 
     new_xls.save(r'D:\test.xls')
 
+
+
+
 # extract_from_col_value_list = get_process_data.extract_from_col_value_list(col_values_list,'发票号',12)
 #
 # get_process_data.extract_from_col_value()
+
+if __name__=="__main__":
+    path='D:/好.xls'.decode('utf-8')
+    sys_invoice_col = 24
+    invoice_col = 4
+    change_to_sheets(path,sys_invoice_col,invoice_col)

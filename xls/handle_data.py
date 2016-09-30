@@ -120,6 +120,7 @@ class Ui_Dialog(object):
     def handle_data(self):
         try:
             filepath = self.file_path.text()
+            print filepath
             sys_invoie_col = int(self.sys_invoice_num.text())
             invoice_col = int(self.invoice_num.text())
             change_to_sheets(filepath,sys_invoie_col,invoice_col)
@@ -127,6 +128,8 @@ class Ui_Dialog(object):
             QtGui.QMessageBox.about(None,_fromUtf8('提示消息'),_fromUtf8('处理成功，文件保存路径D:\processed_data.xls'))
         except:
             QtGui.QMessageBox.critical(None, _fromUtf8('提示消息'), _fromUtf8('遇到问题，处理失败，请联系开发人员。'))
+            info = sys.exc_info()
+            print info[0],info[1]
 
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
