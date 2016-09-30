@@ -3,11 +3,14 @@
 
 import os
 
-class SysCli(object):
+class Sys_Cli(object):
     def __init__(self,dg_name,*avgs):
         self.dg_name = dg_name
 
-        if len(avgs) != 0:
+        if len(avgs) == 1:
+            self.vd_name = avgs[0]
+
+        if len(avgs) == 2:
             self.vd_name = avgs[0]
             self.ip_address = avgs[1]
 
@@ -21,6 +24,7 @@ class SysCli(object):
 
     def del_iscsi_lun(self):
         del_iscsi_lun_CLI = 'ucli vd_iscsi -D -d ' + self.dg_name + ' -v ' + self.vd_name
+        # print del_iscsi_lun_CLI
         os.system(del_iscsi_lun_CLI)
 
     def del_nas_lun(self):
