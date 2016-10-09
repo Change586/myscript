@@ -76,10 +76,13 @@ class get_data(object):
         return extract_col_value_list
 
     #按偏移量从单元格中提取出想要的字段，并返回该字段
-    def shifting_extract_col_value(self,col_value,target_string,shifting_num,extract_len):
+    def shifting_extract_col_value(self,col_value,target_string,shifting_num,extract_len=None):
         try:
             start_index = col_value.index(target_string)
-            end_index = start_index + extract_len
+            if extract_len:
+                end_index = start_index + extract_len
+            else:
+                end_index = None
             extract_col_value = col_value[(start_index+shifting_num):end_index]
         except ValueError:
             extract_col_value = ""
@@ -134,6 +137,7 @@ class get_data(object):
                 unique_values_list.append(key)
 
         return unique_values_list
+
 
 
 
