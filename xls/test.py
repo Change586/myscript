@@ -32,7 +32,8 @@ for col_value in col_values:
 
                 end_index = sys_invoice_len - leng
                 if leng != sys_invoice_len:
-                    sys_invoice = sys_invoice_num[:end_index]+sys_invoice
+                    prefix = sys_invoice_num[:end_index]
+                    sys_invoice = prefix + sys_invoice[:leng+1] + prefix + sys_invoice[leng+1:]
                     sys_invoice_list.append(sys_invoice)
                 else:
                     sys_invoice_list.append(sys_invoice)
