@@ -4,6 +4,7 @@ __author__ = 'Change'
 
 import xlwt
 import sys
+from jiebao_dongfeng_data import jiebao_dongfeng_data
 
 from read_sheet import get_data
 
@@ -23,23 +24,27 @@ def change_to_sheets(path,sys_invoice_col,invoice_col):
 
     #col_values_list = get_process_data.get_col_values(table,23)
 
-    jiebao_row = 1
-    dongfeng_row = 1
+    jiebao_row = 0
+    dongfeng_row = 0
 
-    for col in xrange(count_cols):
-        jiebao_sheet.write(0,col,table.row_values(0)[col])
-        dongfeng_sheet.write(0,col,table.row_values(0)[col])
+    # for col in xrange(count_cols):
+    #     # jiebao_sheet.write(0,col,table.row_values(0)[col])
+    #     dongfeng_sheet.write(0,col,table.row_values(0)[col])
 
     for row in xrange(count_rows):
         row_values = get_process_data.get_row_values(table,row)
         if row_values[7] == '捷豹路虎汽车贸易（上海）有限公司' and row_values[20] == '否':
-            for col in xrange(count_cols):
-                jiebao_sheet.write(jiebao_row,col,row_values[col])
-            jiebao_row = jiebao_row + 1
+            jiebao_row = jiebao_dongfeng_data(row_values,jiebao_sheet,jiebao_row)
+            # for col in xrange(count_cols):
+            #     jiebao_sheet.write(jiebao_row,col,row_values[col])
+            # jiebao_row = jiebao_row + 1
+
         elif row_values[7] == '东风本田发动机有限公司' and row_values[20] == '否':
-            for col in xrange(count_cols):
-                dongfeng_sheet.write(dongfeng_row,col,row_values[col])
-            dongfeng_row = dongfeng_row + 1
+            dongfeng_row = jiebao_dongfeng_data(row_values,dongfeng_sheet,dongfeng_row)
+            # for col in xrange(count_cols):
+            #     dongfeng_sheet.write(dongfeng_row,col,row_values[col])
+            # dongfeng_row = dongfeng_row + 1
+
         elif row_values[20] == '否':
             for col in xrange(count_cols):
                 if col != sys_invoice_col-1 and col == invoice_col-1:
@@ -60,7 +65,7 @@ def change_to_sheets(path,sys_invoice_col,invoice_col):
 # get_process_data.extract_from_col_value()
 
 if __name__=="__main__":
-    path='D:/好.xls'.decode('utf-8')
+    path=r'D:\20160901-30.xls'
     sys_invoice_col = 24
     invoice_col = 4
     change_to_sheets(path,sys_invoice_col,invoice_col)

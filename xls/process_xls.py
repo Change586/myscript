@@ -118,9 +118,9 @@ def process_xls():
 
     new_file.save(r'D:\processed_data.xls')
 
-    file_name = r'D:\test.xls'
-    if os.path.exists(file_name):
-        os.remove(file_name)
+    # file_name = r'D:\test.xls'
+    # if os.path.exists(file_name):
+    #     os.remove(file_name)
 
 
 
