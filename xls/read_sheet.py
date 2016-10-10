@@ -92,6 +92,20 @@ class get_data(object):
 
         return extract_col_value
 
+    #提取某字符串中某一段字符
+    def extract_col_setion_value(self,col_value,start_target_string,shifting_num,end_target_string):
+        try:
+            start_index = col_value.index(start_target_string)+shifting_num
+            end_index = col_value.index(end_target_string)
+            extract_col_value = col_value[start_index:end_index]
+        except ValueError:
+            extract_col_value = ""
+        except:
+            info = sys.exc_info()
+            extract_col_value = info[1]
+
+        return extract_col_value
+
     #从单元格中提取出想要的字段，并返回该字段
     def extract_col_value(self,col_value,target_string,extract_len):
         try:
