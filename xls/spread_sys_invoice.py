@@ -28,7 +28,9 @@ def spread_sys_invoice(col_value):
 
     if extract_col_value:
         sys_invoices_temp_list = extract_col_value.split('/')
-        # print sys_invoices_temp_list
+        print sys_invoices_temp_list
+
+        up_leng = None
 
         for sys_invoice in sys_invoices_temp_list:
             if '-' in sys_invoice:
@@ -61,7 +63,7 @@ def spread_sys_invoice(col_value):
     else:
         sys_invoice_list.append(sys_invoice_num)
 
-    # print sys_invoice_list
+    #print sys_invoice_list
 
     #展开所有的系统发票号
     spread_sys_invoice_list = []
@@ -80,7 +82,7 @@ def spread_sys_invoice(col_value):
 
 if __name__ == '__main__':
     path = r'D:\processed_data.xls'
-    read_table_index = 2
+    read_table_index = 1
     processed_col = 24
     data = get_data()
     table = data.get_table_data(path,read_table_index)
@@ -90,7 +92,7 @@ if __name__ == '__main__':
         sys_invoice_string = row_values[processed_col-1]
         spread_sys_invoice_list = spread_sys_invoice(sys_invoice_string)
 
-        print spread_sys_invoice_list
+        #print spread_sys_invoice_list
 
 
 

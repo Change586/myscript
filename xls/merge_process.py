@@ -63,22 +63,31 @@ def merge_process(process_table,write_table):
             for value in values:
                 invoice_num.append(process_table.row_values(value)[invoice_col_num])
 
+            print invoice_num
+
+            invoice_num = map(int,invoice_num)
+
             min_invoice_num = min(invoice_num)
             max_invoice_num = max(invoice_num)
+            space = max_invoice_num - min_invoice_num
 
-            min_invoice_index = invoice_num.index(min_invoice_num)
-            max_invoice_index = invoice_num.index(max_invoice_num)
+            if space <= 100:
 
-    #        print min_invoice_index,max_invoice_index
+                min_invoice_index = invoice_num.index(min_invoice_num)
+                max_invoice_index = invoice_num.index(max_invoice_num)
 
-            write_table.write(write_row_num,0,'15610')
-            write_table.write(write_row_num,1,process_table.row_values(values[min_invoice_index])[repertory_col_num])
-            write_table.write(write_row_num,2,process_table.row_values(values[min_invoice_index])[sys_invoice_col_num])
-            write_table.write(write_row_num,3,'RI')
-            write_table.write(write_row_num,4,process_table.row_values(values[min_invoice_index])[invoice_col_num] + '-' \
-                            + process_table.row_values(values[max_invoice_index])[invoice_col_num][-3:])
+        #        print min_invoice_index,max_invoice_index
 
-            write_row_num = write_row_num + 1
+                write_table.write(write_row_num,0,'15610')
+                write_table.write(write_row_num,1,process_table.row_values(values[min_invoice_index])[repertory_col_num])
+                write_table.write(write_row_num,2,process_table.row_values(values[min_invoice_index])[sys_invoice_col_num])
+                write_table.write(write_row_num,3,'RI')
+                write_table.write(write_row_num,4,process_table.row_values(values[min_invoice_index])[invoice_col_num] + '-' \
+                                + process_table.row_values(values[max_invoice_index])[invoice_col_num][-5:])
+
+                write_row_num = write_row_num + 1
+            else:
+                pass
 
     # file_name = r'D:\test.xls'
     # if os.path.exists(file_name):
