@@ -5,7 +5,7 @@ __author__ = 'Change'
 import xlwt
 import sys
 from jiebao_dongfeng_data import jiebao_dongfeng_data
-
+from sanfang_data import sanfang_data
 from read_sheet import get_data
 
 def change_to_sheets(path,sys_invoice_col,invoice_col):
@@ -14,7 +14,6 @@ def change_to_sheets(path,sys_invoice_col,invoice_col):
     jiebao_sheet = new_xls.add_sheet(r'jiebao')
     dongfeng_sheet = new_xls.add_sheet(r'dongfeng')
 
-#    path = 'D:\data.xls'
     get_process_data = get_data()
 
     table = get_process_data.get_table_data(path,0)
@@ -26,6 +25,7 @@ def change_to_sheets(path,sys_invoice_col,invoice_col):
 
     jiebao_row = 0
     dongfeng_row = 0
+    sanfang_row = 0
 
     # for col in xrange(count_cols):
     #     # jiebao_sheet.write(0,col,table.row_values(0)[col])
@@ -46,23 +46,17 @@ def change_to_sheets(path,sys_invoice_col,invoice_col):
             # dongfeng_row = dongfeng_row + 1
 
         elif row_values[20] == '否':
-            for col in xrange(count_cols):
-                if col != sys_invoice_col-1 and col == invoice_col-1:
-                    sanfang_sheet.write(row,0,row_values[col])
-                elif col == count_cols-1:
-                    invoice_cell_value = get_process_data.shifting_extract_col_value(row_values[col],'发票号',4,12)
-                    repertory_cell_value = get_process_data.extract_col_value(row_values[col],'CNCS',8)
-                    sanfang_sheet.write(row,1,invoice_cell_value)
-                    sanfang_sheet.write(row,2,repertory_cell_value)
+            sanfang_row = sanfang_data(row_values,sanfang_sheet,sanfang_row)
+            # for col in xrange(count_cols):
+            #     if col != sys_invoice_col-1 and col == invoice_col-1:
+            #         sanfang_sheet.write(row,0,row_values[col])
+            #     elif col == count_cols-1:
+            #         invoice_cell_value = get_process_data.shifting_extract_col_value(row_values[col],'发票号',4,12)
+            #         repertory_cell_value = get_process_data.extract_col_value(row_values[col],'CNCS',8)
+            #         sanfang_sheet.write(row,1,invoice_cell_value)
+            #         sanfang_sheet.write(row,2,repertory_cell_value)
 
     new_xls.save(r'D:\test.xls')
-
-
-
-
-# extract_from_col_value_list = get_process_data.extract_from_col_value_list(col_values_list,'发票号',12)
-#
-# get_process_data.extract_from_col_value()
 
 if __name__=="__main__":
     path=r'D:\20160901-30.xls'

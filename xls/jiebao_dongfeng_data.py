@@ -1,7 +1,6 @@
 #!/usr/bin/python
 #--*-- encoding:utf-8 --*--
 from read_sheet import get_data
-from collections import Counter
 from spread_sys_invoice import spread_sys_invoice
 import xlwt
 
@@ -13,14 +12,17 @@ def jiebao_dongfeng_data(row_values,new_table,write_row_num):
     repertory_cell_value = data.extract_col_value(sys_invoice_string,'CNCS',8)
     sys_invoice_num = data.shifting_extract_col_value(sys_invoice_string,'发票号',4,12)
     spread_sys_invoice_list = spread_sys_invoice(sys_invoice_string)
+    if sys_invoice_num:
+        for sys_invoice in spread_sys_invoice_list:
+            new_table.write(write_row_num,0,'15610')
+            new_table.write(write_row_num,1,repertory_cell_value)
+            new_table.write(write_row_num,2,sys_invoice)
+            new_table.write(write_row_num,3,'RI')
+            new_table.write(write_row_num,4,invoice_num)
+            write_row_num = write_row_num + 1
 
-    for sys_invoice in spread_sys_invoice_list:
-        new_table.write(write_row_num,0,'15610')
-        new_table.write(write_row_num,1,repertory_cell_value)
-        new_table.write(write_row_num,2,sys_invoice)
-        new_table.write(write_row_num,3,'RI')
-        new_table.write(write_row_num,4,invoice_num)
-        write_row_num = write_row_num + 1
+    else:
+        print 'part of the 24 col data do not have system invoice.'
 
     return write_row_num
 
@@ -28,7 +30,7 @@ def jiebao_dongfeng_data(row_values,new_table,write_row_num):
 
 if __name__ == '__main__':
     path = r'D:\processed_data.xls'
-    read_table_index = 1
+    read_table_index = 2
 
     data = get_data()
 
