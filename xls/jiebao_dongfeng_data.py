@@ -9,11 +9,11 @@ def jiebao_dongfeng_data(row_values,new_table,write_row_num):
     data = get_data()
     invoice_num = row_values[3]
     sys_invoice_string = row_values[processed_col-1]
-    repertory_cell_value = data.extract_col_value(sys_invoice_string,'CNCS',8)
+    repertory_cell_value = '    ' + data.extract_col_value(sys_invoice_string,'CNCS',8)
     sys_invoice_num = data.shifting_extract_col_value(sys_invoice_string,'发票号',4,12)
     spread_sys_invoice_list = spread_sys_invoice(sys_invoice_string)
 
-    print spread_sys_invoice_list
+    #print spread_sys_invoice_list
 
     if sys_invoice_num:
         for sys_invoice in spread_sys_invoice_list:

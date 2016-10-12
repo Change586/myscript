@@ -83,7 +83,7 @@ def merge_process(process_table,write_table):
                 write_table.write(write_row_num,2,process_table.row_values(values[min_invoice_index])[sys_invoice_col_num])
                 write_table.write(write_row_num,3,'RI')
                 write_table.write(write_row_num,4,process_table.row_values(values[min_invoice_index])[invoice_col_num] + '-' \
-                                + process_table.row_values(values[max_invoice_index])[invoice_col_num][-5:])
+                                + process_table.row_values(values[max_invoice_index])[invoice_col_num][-2:])
 
                 write_row_num = write_row_num + 1
             else:
