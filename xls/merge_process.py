@@ -16,6 +16,61 @@ def merge_process(process_table,write_table):
                 reapt_values_dic[value].append(i)
         return reapt_values_dic
 
+    def get_serial_num_list(list,serial_num_list):
+        # print list
+        if len(list) > 1:
+            sort_list = sorted(list)
+            leng = len(sort_list)
+            for index in xrange(1, leng):
+                space_temp = sort_list[index] - sort_list[0]
+                if index == space_temp:
+                    if index != leng-1:
+                        continue
+                    else:
+                        serial_num_list.append(list[:index])
+                        # print "a"
+                        # print serial_num_list
+                        return serial_num_list
+                else:
+                    if index != leng -1:
+                        serial_num_list.append(sort_list[:index])
+                        # print "b"
+                        # print serial_num_list
+                        list = sort_list[index:]
+                        get_serial_num_list(list, serial_num_list)
+                        return serial_num_list #切莫忘记这里的return
+                    else:
+                        serial_num_list.append(sort_list[:index])
+                        serial_num_list.append(sort_list[index:])
+                        # print "c"
+                        # print serial_num_list
+                        return serial_num_list
+
+        elif len(list)==1:
+            serial_num_list.append(list)
+            # print "d"
+            # print serial_num_list
+            return serial_num_list
+
+    def merge_data(list):
+        new_list = []
+        for li in list:
+            if len(li) !=1:
+                if len(str(li[0])) != 8:
+                    data = (8-len(str(li[0])))*'0'+str(li[0])+'-'+str(li[-1])[-3:]
+                    new_list.append(data)
+                else:
+                    data = str(li[0])+'-'+str(li[-1])[-3:]
+                    new_list.append(data)
+            else:
+                if len(str(li[0])) != 8:
+                    data = (8 - len(str(li[0]))) * '0' + str(li[0])
+                    new_list.append(data)
+                else:
+                    data = str(li[0])
+                    new_list.append(data)
+        return new_list
+
     table_nrows = process_table.nrows
     table_ncols = process_table.ncols
 
@@ -63,15 +118,15 @@ def merge_process(process_table,write_table):
             for value in values:
                 invoice_num.append(process_table.row_values(value)[invoice_col_num])
 
-            print invoice_num
+            # print invoice_num
 
             invoice_num = map(int,invoice_num)
 
             min_invoice_num = min(invoice_num)
             max_invoice_num = max(invoice_num)
-            space = max_invoice_num - min_invoice_num
+            space = max_invoice_num - min_invoice_num + 1
 
-            if space <= 100:
+            if space == len(invoice_num):
 
                 min_invoice_index = invoice_num.index(min_invoice_num)
                 max_invoice_index = invoice_num.index(max_invoice_num)
@@ -83,11 +138,28 @@ def merge_process(process_table,write_table):
                 write_table.write(write_row_num,2,process_table.row_values(values[min_invoice_index])[sys_invoice_col_num])
                 write_table.write(write_row_num,3,'RI')
                 write_table.write(write_row_num,4,process_table.row_values(values[min_invoice_index])[invoice_col_num] + '-' \
-                                + process_table.row_values(values[max_invoice_index])[invoice_col_num][-2:])
+                                + process_table.row_values(values[max_invoice_index])[invoice_col_num][-3:])
 
                 write_row_num = write_row_num + 1
             else:
-                pass
+                # print invoice_num
+                serial_num_list = []
+                serial_num_list = get_serial_num_list(invoice_num,serial_num_list)
+                merge_data_list = merge_data(serial_num_list)
+                merge_invoice_num = '  '.join(merge_data_list)
+                # print merge_data_list
+                write_table.write(write_row_num, 0, '15610')
+                write_table.write(write_row_num, 1,
+                                  process_table.row_values(values[min_invoice_index])[repertory_col_num])
+                write_table.write(write_row_num, 2,
+                                  process_table.row_values(values[min_invoice_index])[sys_invoice_col_num])
+                write_table.write(write_row_num, 3, 'RI')
+                write_table.write(write_row_num, 4,merge_invoice_num)
+
+                write_row_num = write_row_num + 1
+
+
+
 
     # file_name = r'D:\test.xls'
     # if os.path.exists(file_name):
