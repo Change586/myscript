@@ -7,12 +7,14 @@ import sys
 from jiebao_dongfeng_data import jiebao_dongfeng_data
 from sanfang_data import sanfang_data
 from read_sheet import get_data
+from no_process_data import no_process_data
 
 def change_to_sheets(path,sys_invoice_col,invoice_col):
     new_xls = xlwt.Workbook()
     sanfang_sheet = new_xls.add_sheet(r'sanfang')
     jiebao_sheet = new_xls.add_sheet(r'jiebao')
     dongfeng_sheet = new_xls.add_sheet(r'dongfeng')
+    no_process_data_sheet = new_xls.add_sheet(r'no_process_data')
 
     get_process_data = get_data()
 
@@ -26,6 +28,7 @@ def change_to_sheets(path,sys_invoice_col,invoice_col):
     jiebao_row = 0
     dongfeng_row = 0
     sanfang_row = 0
+    no_process_data_row = 0
 
     # for col in xrange(count_cols):
     #     # jiebao_sheet.write(0,col,table.row_values(0)[col])
@@ -55,6 +58,8 @@ def change_to_sheets(path,sys_invoice_col,invoice_col):
             #         repertory_cell_value = get_process_data.extract_col_value(row_values[col],'CNCS',8)
             #         sanfang_sheet.write(row,1,invoice_cell_value)
             #         sanfang_sheet.write(row,2,repertory_cell_value)
+        else:
+            no_process_data_row = no_process_data(row_values,no_process_data_sheet,no_process_data_row)
 
     new_xls.save(r'D:\test.xls')
 
