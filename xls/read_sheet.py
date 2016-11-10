@@ -153,7 +153,26 @@ class get_data(object):
         return unique_values_list
 
 
+if __name__ == '__main__':
+    path = r'D:\processed_data.xls'
+    read_table_index = 1
+    processed_col = 24
+    data = get_data()
+    table = data.get_table_data(path,read_table_index)
+    rows = table.nrows
+    for row_num in xrange(1,rows):
+        row_values = data.get_row_values(table,row_num)
+        sys_invoice_string = row_values[processed_col-1]
+        sys_invoice_num = data.shifting_extract_col_value(sys_invoice_string,'发票号',4,12)
 
+        if '结算批号' in sys_invoice_string:
+            extract_col_value = data.extract_col_setion_value(sys_invoice_string,'到期日',13,'结算批号')
+        else:
+            extract_col_value = data.shifting_extract_col_value(sys_invoice_string,'到期日',13)
+
+        extract_col_value = extract_col_value.strip()
+
+        print extract_col_value
 
 
 
