@@ -22,15 +22,13 @@ def sanfang_data(row_values,sanfang_table,sanfang_write_row_num,no_process_table
         sanfang_table.write(sanfang_write_row_num,4,invoice_num)
         sanfang_write_row_num = sanfang_write_row_num + 1
     else:
-        no_process_table.write(no_process_write_row_num,1,row_values[3])
-        no_process_table.write(no_process_write_row_num,2,row_values[7])
-        no_process_table.write(no_process_write_row_num,3,row_values[20])
-        no_process_table.write(no_process_write_row_num,4,row_values[23])
+        no_process_table.write(no_process_write_row_num,0,row_values[3])
+        no_process_table.write(no_process_write_row_num,1,row_values[7])
+        no_process_table.write(no_process_write_row_num,2,row_values[20])
+        no_process_table.write(no_process_write_row_num,3,row_values[23])
         no_process_write_row_num = no_process_write_row_num + 1
 
-        return no_process_write_row_num
-
-    return sanfang_write_row_num
+    return sanfang_write_row_num,no_process_write_row_num
 
 
 if __name__ == '__main__':

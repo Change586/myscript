@@ -37,19 +37,22 @@ def change_to_sheets(path,sys_invoice_col,invoice_col):
     for row in xrange(count_rows):
         row_values = get_process_data.get_row_values(table,row)
         if row_values[7] == '捷豹路虎汽车贸易（上海）有限公司' and row_values[20] == '否':
-            jiebao_row = jiebao_dongfeng_data(row_values,jiebao_sheet,jiebao_row)
+            jiebao_row,no_process_data_row = jiebao_dongfeng_data(row_values,jiebao_sheet,jiebao_row,\
+                                                                  no_process_data_sheet,no_process_data_row)
             # for col in xrange(count_cols):
             #     jiebao_sheet.write(jiebao_row,col,row_values[col])
             # jiebao_row = jiebao_row + 1
 
         elif row_values[7] == '东风本田发动机有限公司' and row_values[20] == '否':
-            dongfeng_row = jiebao_dongfeng_data(row_values,dongfeng_sheet,dongfeng_row)
+            dongfeng_row,no_process_data_row = jiebao_dongfeng_data(row_values,dongfeng_sheet,dongfeng_row,\
+                                                                    no_process_data_sheet,no_process_data_row)
             # for col in xrange(count_cols):
             #     dongfeng_sheet.write(dongfeng_row,col,row_values[col])
             # dongfeng_row = dongfeng_row + 1
 
         elif row_values[20] == '否':
-            sanfang_row = sanfang_data(row_values,sanfang_sheet,sanfang_row)
+            sanfang_row,no_process_data_row = sanfang_data(row_values,sanfang_sheet,sanfang_row,\
+                                                           no_process_data_sheet,no_process_data_row)
             # for col in xrange(count_cols):
             #     if col != sys_invoice_col-1 and col == invoice_col-1:
             #         sanfang_sheet.write(row,0,row_values[col])
@@ -64,7 +67,7 @@ def change_to_sheets(path,sys_invoice_col,invoice_col):
     new_xls.save(r'D:\test.xls')
 
 if __name__=="__main__":
-    path=r'D:\20161001-31.xls'
+    path=r'C:\20161001-31.xls'
     sys_invoice_col = 24
     invoice_col = 4
     change_to_sheets(path,sys_invoice_col,invoice_col)

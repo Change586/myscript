@@ -4,7 +4,7 @@ from read_sheet import get_data
 from spread_sys_invoice import spread_sys_invoice
 import xlwt
 
-def jiebao_dongfeng_data(row_values,new_table,write_row_num):
+def jiebao_dongfeng_data(row_values,jiebao_dongfeng_table,jiebao_dongfeng_write_row_num,no_process_table,no_process_row_num):
     processed_col = 24
     data = get_data()
     invoice_num = row_values[3]
@@ -17,17 +17,21 @@ def jiebao_dongfeng_data(row_values,new_table,write_row_num):
 
     if sys_invoice_num:
         for sys_invoice in spread_sys_invoice_list:
-            new_table.write(write_row_num,0,'15610')
-            new_table.write(write_row_num,1,repertory_cell_value)
-            new_table.write(write_row_num,2,sys_invoice)
-            new_table.write(write_row_num,3,'RI')
-            new_table.write(write_row_num,4,invoice_num)
-            write_row_num = write_row_num + 1
+            jiebao_dongfeng_table.write(jiebao_dongfeng_write_row_num,0,'15610')
+            jiebao_dongfeng_table.write(jiebao_dongfeng_write_row_num,1,repertory_cell_value)
+            jiebao_dongfeng_table.write(jiebao_dongfeng_write_row_num,2,sys_invoice)
+            jiebao_dongfeng_table.write(jiebao_dongfeng_write_row_num,3,'RI')
+            jiebao_dongfeng_table.write(jiebao_dongfeng_write_row_num,4,invoice_num)
+            jiebao_dongfeng_write_row_num = jiebao_dongfeng_write_row_num + 1
 
     else:
-        print 'part of the 24 col data do not have system invoice.'
+        no_process_table.write(no_process_row_num,0,row_values[3])
+        no_process_table.write(no_process_row_num,1,row_values[7])
+        no_process_table.write(no_process_row_num,2,row_values[20])
+        no_process_table.write(no_process_row_num,3,row_values[23])
+        no_process_row_num = no_process_row_num + 1
 
-    return write_row_num
+    return jiebao_dongfeng_write_row_num,no_process_row_num
 
 # new_xls.save(r'D:\jiebao.xls')
 
