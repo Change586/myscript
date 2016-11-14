@@ -4,7 +4,8 @@ from read_sheet import get_data
 from spread_sys_invoice import spread_sys_invoice
 import xlwt
 
-def jiebao_dongfeng_data(row_values,jiebao_dongfeng_table,jiebao_dongfeng_write_row_num,no_process_table,no_process_row_num):
+def jiebao_dongfeng_data(row_values,jiebao_dongfeng_table,jiebao_dongfeng_write_row_num,\
+no_process_table,no_process_row_num):
     processed_col = 24
     data = get_data()
     invoice_num = row_values[3]
