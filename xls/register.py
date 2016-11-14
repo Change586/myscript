@@ -3,7 +3,7 @@ from _winreg import *
 
 # tweak as necessary
 version = sys.version[:3]
-installpath = sys.prefix
+installpath = 'D:\\Anaconda2'
 regpath = "SOFTWARE\\Python\\Pythoncore\\%s\\" % (version)
 installkey = "InstallPath"
 pythonkey = "PythonPath"
@@ -32,6 +32,12 @@ def RegisterPy():
 
     if (QueryValue(reg, installkey) == installpath and
                 QueryValue(reg, pythonkey) == pythonpath):
+        CloseKey(reg)
+        print "=== Python", version, "is already registered!"
+        return CloseKey(reg)
+    else:
+        SetValue(reg, installkey, REG_SZ, installpath)
+        SetValue(reg, pythonkey, REG_SZ, pythonpath)
         CloseKey(reg)
         print "=== Python", version, "is already registered!"
         return CloseKey(reg)
