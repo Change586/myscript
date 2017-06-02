@@ -3,7 +3,7 @@ from _winreg import *
 
 # tweak as necessary
 version = sys.version[:3]
-installpath = 'E:\\Python27'
+installpath = 'D:\\Anaconda2'
 regpath = "SOFTWARE\\Python\\Pythoncore\\%s\\" % (version)
 installkey = "InstallPath"
 pythonkey = "PythonPath"

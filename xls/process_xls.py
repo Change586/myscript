@@ -45,7 +45,7 @@ def process_xls():
             new_no_process_table.write(row,col,no_process_row_values[col])
 
     #保存新excle文件
-    new_file.save(r'D:\process_data.xls')
+    new_file.save(r'D:\processed_data.xls')
 
     file_name = r'D:\test.xls'
     if os.path.exists(file_name):
