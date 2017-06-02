@@ -1,0 +1,20 @@
+create temporary tablespace changetest_temp 
+tempfile 'D:\app\changetest_temp.dbf' 
+size 32m 
+autoextend on 
+next 32m maxsize 2048m 
+extent management local; 
+
+create tablespace changetest 
+logging 
+datafile 'D:\app\changetest.dbf' 
+size 128m 
+autoextend on 
+next 32m maxsize 2048m 
+extent management local; 
+
+create user change identified by change
+default tablespace changetest
+temporary tablespace changetest_temp
+ 
+grant connect,resource to change

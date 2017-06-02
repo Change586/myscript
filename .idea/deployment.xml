@@ -2,7 +2,21 @@
 <project version="4">
   <component name="PublishConfigData">
     <serverData>
-      <paths name="172.16.130.88">
+      <paths name="172.16.129.66">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/usr/local/ufs" local="$PROJECT_DIR$/../UFS" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="172.16.130.108">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="172.16.130.77">
         <serverdata>
           <mappings>
             <mapping deploy="/home/" local="$PROJECT_DIR$" web="/" />
