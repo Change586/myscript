@@ -24,49 +24,50 @@ def spread_sys_invoice(col_value):
             last_sys_invoice = sys_invoice_num
 
             for sys_invoice in sys_invoices_temp_list:
-                if '-' in sys_invoice:
-                    leng = sys_invoice.index('-')
-                    end_index = sys_invoice_len - leng
-                    len_sys_invoice =  len(sys_invoice)
+                if sys_invoice:
+                    if '-' in sys_invoice:
+                        leng = sys_invoice.index('-')
+                        end_index = sys_invoice_len - leng
+                        len_sys_invoice =  len(sys_invoice)
 
-                    if leng != sys_invoice_len:
-                        #处理 60364208-4233/4268-4337/49/57-69和60363381-83/3463-3477/3535-38/3587-3661/65-77/3752-61/64-69/86两种特殊情况
-                        if leng == len_sys_invoice/2:
+                        if leng != sys_invoice_len:
+                            #处理 60364208-4233/4268-4337/49/57-69和60363381-83/3463-3477/3535-38/3587-3661/65-77/3752-61/64-69/86两种特殊情况
+                            if leng == len_sys_invoice/2:
+                                prefix = last_sys_invoice[:end_index]
+                                last_sys_invoice = prefix + sys_invoice[leng+1:]
+                                sys_invoice = prefix + sys_invoice[:leng+1] + last_sys_invoice
+                                sys_invoice_list.append(sys_invoice)
+                            else:
+                                leng2 = len_sys_invoice-leng-1
+                                prefix = last_sys_invoice[:end_index]
+                                prefix2 = last_sys_invoice[:end_index]+sys_invoice[:leng-leng2]
+                                last_sys_invoice = prefix2 + sys_invoice[leng+1:]
+                                sys_invoice = prefix + sys_invoice[:leng+1] + last_sys_invoice
+                                sys_invoice_list.append(sys_invoice)
+                        else: #60364208-4233/4268-4337/60363381-83
+                            if leng == len_sys_invoice/2:
+                                last_sys_invoice = sys_invoice[leng+1:]
+                                sys_invoice = sys_invoice[:leng+1] + last_sys_invoice
+                                sys_invoice_list.append(sys_invoice)
+                            else:
+                                leng2 = len_sys_invoice-leng-1
+                                prefix = sys_invoice[:leng-leng2]
+                                last_sys_invoice = prefix + sys_invoice[leng+1:]
+                                sys_invoice = sys_invoice[:leng+1] + last_sys_invoice
+                                sys_invoice_list.append(sys_invoice)
+                    else: #没有‘-’
+                        leng = len(sys_invoice)
+                        end_index = sys_invoice_len - leng
+
+                        if leng != sys_invoice_len:
                             prefix = last_sys_invoice[:end_index]
-                            last_sys_invoice = prefix + sys_invoice[leng+1:]
-                            sys_invoice = prefix + sys_invoice[:leng+1] + last_sys_invoice
+                            last_sys_invoice = prefix + sys_invoice
+                            sys_invoice = last_sys_invoice
                             sys_invoice_list.append(sys_invoice)
                         else:
-                            leng2 = len_sys_invoice-leng-1
-                            prefix = last_sys_invoice[:end_index]
-                            prefix2 = last_sys_invoice[:end_index]+sys_invoice[:leng-leng2]
-                            last_sys_invoice = prefix2 + sys_invoice[leng+1:]
-                            sys_invoice = prefix + sys_invoice[:leng+1] + last_sys_invoice
+                            last_sys_invoice = sys_invoice
                             sys_invoice_list.append(sys_invoice)
-                    else: #60364208-4233/4268-4337/60363381-83
-                        if leng == len_sys_invoice/2:
-                            last_sys_invoice = sys_invoice[leng+1:]
-                            sys_invoice = sys_invoice[:leng+1] + last_sys_invoice
-                            sys_invoice_list.append(sys_invoice)
-                        else:
-                            leng2 = len_sys_invoice-leng-1
-                            prefix = sys_invoice[:leng-leng2]
-                            last_sys_invoice = prefix + sys_invoice[leng+1:]
-                            sys_invoice = sys_invoice[:leng+1] + last_sys_invoice
-                            sys_invoice_list.append(sys_invoice)
-                else: #没有‘-’
-                    leng = len(sys_invoice)
-                    end_index = sys_invoice_len - leng
-
-                    if leng != sys_invoice_len:
-                        prefix = last_sys_invoice[:end_index]
-                        last_sys_invoice = prefix + sys_invoice
-                        sys_invoice = last_sys_invoice
-                        sys_invoice_list.append(sys_invoice)
-                    else:
-                        last_sys_invoice = sys_invoice
-                        sys_invoice_list.append(sys_invoice)
-                # print up_leng,up_sys_invoice
+                    # print up_leng,up_sys_invoice
 
 
         else:

@@ -47,9 +47,9 @@ def process_xls():
     #保存新excle文件
     new_file.save(r'D:\process_data.xls')
 
-    # file_name = r'D:\test.xls'
-    # if os.path.exists(file_name):
-    #     os.remove(file_name)
+    file_name = r'D:\test.xls'
+    if os.path.exists(file_name):
+        os.remove(file_name)
 
 if __name__ == '__main__':
 

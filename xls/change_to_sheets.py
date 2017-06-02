@@ -36,7 +36,7 @@ def change_to_sheets(path,sys_invoice_col,invoice_col):
 
     for row in xrange(count_rows):
         row_values = get_process_data.get_row_values(table,row)
-        if row_values[7] == '捷豹路虎汽车贸易（上海）有限公司' and row_values[20] == '否':
+        if row_values[7] == '捷豹路虎（中国）投资有限公司' and row_values[20] == '否':
             jiebao_row,no_process_data_row = jiebao_dongfeng_data(row_values,jiebao_sheet,jiebao_row,\
                                                                   no_process_data_sheet,no_process_data_row)
             # for col in xrange(count_cols):

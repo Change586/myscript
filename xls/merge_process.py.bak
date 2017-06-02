@@ -1,0 +1,166 @@
+#!/usr/bin/python
+#--*-- encoding:utf-8 --*--
+
+import xlrd
+import xlwt
+from collections import Counter
+import os
+
+def merge_process(process_table,write_table):
+    #获取列表中所有相同元素的索引号
+    def get_equ_elem_index(value,list):
+        reapt_values_dic = {}
+        reapt_values_dic[value]=[]
+        for i in xrange(len(list)):
+            if list[i] == value:
+                reapt_values_dic[value].append(i)
+        return reapt_values_dic
+
+    def get_serial_num_list(list,serial_num_list):
+        # print list
+        if len(list) > 1:
+            sort_list = sorted(list)
+            leng = len(sort_list)
+            for index in xrange(1, leng):
+                space_temp = sort_list[index] - sort_list[0]
+                if index == space_temp:
+                    if index != leng-1:
+                        continue
+                    else:
+                        serial_num_list.append(list[:index])
+                        # print "a"
+                        # print serial_num_list
+                        return serial_num_list
+                else:
+                    if index != leng -1:
+                        serial_num_list.append(sort_list[:index])
+                        # print "b"
+                        # print serial_num_list
+                        list = sort_list[index:]
+                        get_serial_num_list(list, serial_num_list)
+                        return serial_num_list #切莫忘记这里的return
+                    else:
+                        serial_num_list.append(sort_list[:index])
+                        serial_num_list.append(sort_list[index:])
+                        # print "c"
+                        # print serial_num_list
+                        return serial_num_list
+
+        elif len(list)==1:
+            serial_num_list.append(list)
+            # print "d"
+            # print serial_num_list
+            return serial_num_list
+
+    def merge_data(list):
+        new_list = []
+        for li in list:
+            if len(li) !=1:
+                if len(str(li[0])) != 8:
+                    data = (8-len(str(li[0])))*'0'+str(li[0])+'-'+str(li[-1])[-3:]
+                    new_list.append(data)
+                else:
+                    data = str(li[0])+'-'+str(li[-1])[-3:]
+                    new_list.append(data)
+            else:
+                if len(str(li[0])) != 8:
+                    data = (8 - len(str(li[0]))) * '0' + str(li[0])
+                    new_list.append(data)
+                else:
+                    data = str(li[0])
+                    new_list.append(data)
+        return new_list
+
+    table_nrows = process_table.nrows
+    table_ncols = process_table.ncols
+
+    extract_col_num = 2
+    sys_invoice = process_table.col_values(extract_col_num)
+
+    sys_invoice_count_dict = dict(Counter(sys_invoice))
+    sys_invoice_reapt_dict = {}
+
+    #生产存在重复值及重复次数的键值对，系统发票号：重复次数
+    for key,value in sys_invoice_count_dict.items():
+        if key != '' and value > 1:
+            sys_invoice_reapt_dict[key]=value
+
+    sys_invoice_reapt_list = sys_invoice_reapt_dict.keys()
+
+    # 将未有重复的行写入新的文件中
+    write_row_num = 0
+    repertory_col_num = 1
+    sys_invoice_col_num = 2
+    invoice_col_num = 4
+
+    for rownum in xrange(0,table_nrows):
+        if process_table.row_values(rownum)[extract_col_num] != '' and process_table.row_values(rownum)[extract_col_num] not in sys_invoice_reapt_list:
+            write_table.write(write_row_num,0,'15610')
+            write_table.write(write_row_num,1,process_table.row_values(rownum)[repertory_col_num])
+            write_table.write(write_row_num,2,process_table.row_values(rownum)[sys_invoice_col_num])
+            write_table.write(write_row_num,3,'RI')
+            write_table.write(write_row_num,4,process_table.row_values(rownum)[invoice_col_num])
+
+            write_row_num = write_row_num + 1
+
+    if sys_invoice_reapt_list:
+        #获取所有存在系统发票号相同的号及所对应的索引值
+        all_reapt_values_dict = {}
+        for reapt_sys_invoice_num in sys_invoice_reapt_list:
+            reapt_values_dict = get_equ_elem_index(reapt_sys_invoice_num,sys_invoice)
+            all_reapt_values_dict = dict(all_reapt_values_dict,**reapt_values_dict)
+
+        #合并处理相同系统发票号的行数据,并追加写入新xls文件中
+        for key,values in all_reapt_values_dict.items():
+
+            #获取系统发票号相同的数据中的发票号最小值的索引和最大值的索引，为后面合并发票号做准备
+            invoice_num = []
+            for value in values:
+                invoice_num.append(process_table.row_values(value)[invoice_col_num])
+
+            # print invoice_num
+
+            invoice_num = map(int,invoice_num)
+
+            min_invoice_num = min(invoice_num)
+            max_invoice_num = max(invoice_num)
+            space = max_invoice_num - min_invoice_num + 1
+
+            if space == len(invoice_num):
+
+                min_invoice_index = invoice_num.index(min_invoice_num)
+                max_invoice_index = invoice_num.index(max_invoice_num)
+
+        #        print min_invoice_index,max_invoice_index
+
+                write_table.write(write_row_num,0,'15610')
+                write_table.write(write_row_num,1,process_table.row_values(values[min_invoice_index])[repertory_col_num])
+                write_table.write(write_row_num,2,process_table.row_values(values[min_invoice_index])[sys_invoice_col_num])
+                write_table.write(write_row_num,3,'RI')
+                write_table.write(write_row_num,4,process_table.row_values(values[min_invoice_index])[invoice_col_num] + '-' \
+                                + process_table.row_values(values[max_invoice_index])[invoice_col_num][-2:])
+
+                write_row_num = write_row_num + 1
+            else:
+                # print invoice_num
+                serial_num_list = []
+                serial_num_list = get_serial_num_list(invoice_num,serial_num_list)
+                merge_data_list = merge_data(serial_num_list)
+                merge_invoice_num = '  '.join(merge_data_list)
+                # print merge_data_list
+                write_table.write(write_row_num, 0, '15610')
+                write_table.write(write_row_num, 1,
+                                  process_table.row_values(values[min_invoice_index])[repertory_col_num])
+                write_table.write(write_row_num, 2,
+                                  process_table.row_values(values[min_invoice_index])[sys_invoice_col_num])
+                write_table.write(write_row_num, 3, 'RI')
+                write_table.write(write_row_num, 4,merge_invoice_num)
+
+                write_row_num = write_row_num + 1
+
+
+
+
+    # file_name = r'D:\test.xls'
+    # if os.path.exists(file_name):
+#     os.remove(file_name)
